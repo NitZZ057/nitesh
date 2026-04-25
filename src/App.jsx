@@ -17,6 +17,7 @@ import {
   Sparkles,
   Zap,
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Navbar from './components/Navbar.jsx';
 import Section from './components/Section.jsx';
@@ -139,8 +140,29 @@ const fadeUp = {
 
 export default function App() {
   const baseUrl = import.meta.env.BASE_URL;
+  const [route, setRoute] = useState(window.location.hash);
 
-  if (window.location.hash === '#/case-study') {
+  useEffect(() => {
+    const handleRouteChange = () => setRoute(window.location.hash);
+
+    window.addEventListener('hashchange', handleRouteChange);
+    return () => window.removeEventListener('hashchange', handleRouteChange);
+  }, []);
+
+  useEffect(() => {
+    if (route === '#/case-study') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (!route || route.startsWith('#/')) return;
+
+    requestAnimationFrame(() => {
+      document.querySelector(route)?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }, [route]);
+
+  if (route === '#/case-study') {
     return <CaseStudyPage />;
   }
 
