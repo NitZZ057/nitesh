@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Profile placeholder</title>
+  <desc id="desc">Placeholder profile image with initials NJ.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6d9bb"/>
+      <stop offset="100%" stop-color="#8ecad2"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="56" fill="url(#bg)"/>
+  <circle cx="256" cy="206" r="92" fill="#f9f4ec" opacity="0.9"/>
+  <path d="M96 448c18-88 83-140 160-140s142 52 160 140" fill="#f9f4ec" opacity="0.9"/>
+  <text x="256" y="468" text-anchor="middle" fill="#1f6f78" font-size="52" font-family="Space Grotesk, Arial, sans-serif" font-weight="700">NJ</text>
+</svg>
