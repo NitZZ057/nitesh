@@ -3,16 +3,17 @@ import { Menu, X } from 'lucide-react';
 import Button from './Button.jsx';
 
 const links = [
-  { label: 'Home', href: '/#home' },
-  { label: 'Experience', href: '/#experience' },
-  { label: 'Projects', href: '/#projects' },
-  { label: 'Skills', href: '/#skills' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'Home', hash: 'home' },
+  { label: 'Experience', hash: 'experience' },
+  { label: 'Projects', hash: 'projects' },
+  { label: 'Skills', hash: 'skills' },
+  { label: 'Contact', hash: 'contact' },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const baseUrl = import.meta.env.BASE_URL;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 12);
@@ -28,20 +29,20 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-        <a href="/#home" className="text-base font-black tracking-normal text-ink">
+        <a href={`${baseUrl}#home`} className="text-base font-black tracking-normal text-ink">
           Nitesh Jadhav
         </a>
 
         <div className="hidden items-center gap-7 md:flex">
           {links.map((link) => (
-            <a key={link.href} href={link.href} className="text-sm font-semibold text-muted transition hover:text-ink">
+            <a key={link.hash} href={`${baseUrl}#${link.hash}`} className="text-sm font-semibold text-muted transition hover:text-ink">
               {link.label}
             </a>
           ))}
         </div>
 
         <div className="hidden md:block">
-          <Button href="/#contact">Hire Me</Button>
+          <Button href={`${baseUrl}#contact`}>Hire Me</Button>
         </div>
 
         <button
@@ -58,15 +59,15 @@ export default function Navbar() {
           <div className="mx-auto grid max-w-7xl gap-3">
             {links.map((link) => (
               <a
-                key={link.href}
-                href={link.href}
+                key={link.hash}
+                href={`${baseUrl}#${link.hash}`}
                 onClick={() => setOpen(false)}
                 className="rounded-2xl px-3 py-3 text-sm font-semibold text-muted transition hover:bg-white/5 hover:text-ink"
               >
                 {link.label}
               </a>
             ))}
-            <Button href="/#contact">Hire Me</Button>
+            <Button href={`${baseUrl}#contact`}>Hire Me</Button>
           </div>
         </div>
       ) : null}

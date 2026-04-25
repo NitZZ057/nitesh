@@ -10,6 +10,7 @@ const signals = [
 
 export default function ProfileCard() {
   const [hasPhoto, setHasPhoto] = useState(true);
+  const baseUrl = import.meta.env.BASE_URL;
 
   return (
     <div className="relative mx-auto max-w-md">
@@ -39,7 +40,7 @@ export default function ProfileCard() {
 bg-[linear-gradient(#020617,#020617)_padding-box,_linear-gradient(135deg,#22c55e,#38bdf8)_border-box] bg-slate-950 shadow-2xl shadow-black/40">
                 {hasPhoto ? (
                   <img
-                    src="/Nitesh.png"
+                    src={`${baseUrl}Nitesh.png`}
                     alt="Nitesh Jadhav"
                     onError={() => setHasPhoto(false)}
                     className="h-full w-full object-cover rounded-[200px]"

@@ -138,7 +138,9 @@ const fadeUp = {
 };
 
 export default function App() {
-  if (window.location.pathname === '/case-study') {
+  const baseUrl = import.meta.env.BASE_URL;
+
+  if (window.location.hash === '#/case-study') {
     return <CaseStudyPage />;
   }
 
@@ -253,7 +255,7 @@ export default function App() {
                 ))}
               </div>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Button href="/case-study">
+                <Button href={`${baseUrl}#/case-study`}>
                   View Case Study <ExternalLink size={18} />
                 </Button>
                 <Button href="https://github.com/NitZZ057" variant="ghost">

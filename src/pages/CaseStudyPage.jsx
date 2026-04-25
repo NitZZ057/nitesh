@@ -89,6 +89,8 @@ const fadeUp = {
 };
 
 export default function CaseStudyPage() {
+  const baseUrl = import.meta.env.BASE_URL;
+
   return (
     <div className="min-h-screen bg-canvas text-ink">
       <div className="fixed inset-0 -z-10 noise" />
@@ -103,7 +105,7 @@ export default function CaseStudyPage() {
           className="mx-auto max-w-7xl"
         >
           <motion.div variants={fadeUp} transition={{ duration: 0.6 }}>
-            <a href="/#featured" className="inline-flex items-center gap-2 text-sm font-bold text-muted transition hover:text-primary">
+            <a href={`${baseUrl}#featured`} className="inline-flex items-center gap-2 text-sm font-bold text-muted transition hover:text-primary">
               <ArrowLeft size={17} />
               Back to portfolio
             </a>
