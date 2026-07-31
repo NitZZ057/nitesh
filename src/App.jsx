@@ -27,7 +27,9 @@ import ProjectCard from './components/ProjectCard.jsx';
 import SkillGroup from './components/SkillGroup.jsx';
 import ProfileCard from './components/ProfileCard.jsx';
 import ProjectMockup from './components/ProjectMockup.jsx';
+import ContractMockup from './components/ContractMockup.jsx';
 import CaseStudyPage from './pages/CaseStudyPage.jsx';
+import { defaultCaseStudy } from './data/caseStudies.js';
 
 const projects = [
   {
@@ -42,6 +44,21 @@ const projects = [
       'Connected AI outputs to real insurance workflow automation',
     ],
     tech: ['FastAPI', 'LangChain', 'Pinecone', 'Ragas', 'LLMs'],
+    caseStudy: 'policy-assistant',
+  },
+  {
+    title: 'Contract Intelligence Platform',
+    problem:
+      'Legal and compliance teams compared contract versions by hand, missing clause changes that carried real commercial and regulatory risk.',
+    built:
+      'Built a full-stack platform with async Celery ingestion, clause embeddings in Pinecone, a change detection agent, and a streaming RAG Q&A pipeline behind FastAPI and PostgreSQL.',
+    impact: [
+      'Scored 0.91 Ragas faithfulness on contract Q&A',
+      'Clause-level change detection with risk classification',
+      'Answers carry source clauses and confidence scores',
+    ],
+    tech: ['FastAPI', 'Celery', 'Pinecone', 'PostgreSQL', 'React + TS'],
+    caseStudy: 'contract-intelligence',
   },
   {
     title: 'Production RAG Knowledge Pipeline',
@@ -66,6 +83,47 @@ const projects = [
       'Strengthened backend contracts used by React frontends and internal systems',
     ],
     tech: ['Laravel', 'MySQL', 'Postman', 'Azure', 'REST APIs'],
+  },
+];
+
+const featured = [
+  {
+    slug: 'policy-assistant',
+    stack: 'FastAPI, LangChain, Pinecone, Ragas',
+    heading: 'AI policy automation for insurance workflows',
+    intro:
+      'Insurance policy teams needed accurate answers across dense documents, policy rules, and workflow states. I built an agentic RAG system that retrieves grounded context, reasons through policy intent, and exposes the result through production-ready FastAPI services.',
+    mockup: ProjectMockup,
+    repo: 'https://github.com/NitZZ057',
+    blocks: [
+      ['Problem', 'Manual policy lookup created slow decisions, inconsistent interpretation, and limited traceability.'],
+      ['Solution', 'Designed planner, retrieval, reasoning, and response agents backed by Pinecone vector search and LangChain orchestration.'],
+      ['Architecture', 'Document ingestion creates embeddings, retrieval injects policy context, agents coordinate task flow, and Ragas evaluates faithfulness before scaling usage.'],
+    ],
+    wins: [
+      '90%+ faithfulness measured with Ragas',
+      'Reduced manual policy review effort by roughly 50%',
+      'Automated document-grounded answers for insurance workflows',
+    ],
+  },
+  {
+    slug: 'contract-intelligence',
+    stack: 'FastAPI, Celery, Pinecone, PostgreSQL, React',
+    heading: 'Clause-level contract analysis for legal and compliance teams',
+    intro:
+      'Legal teams needed to know exactly what changed between two contract versions and what it meant. I built a platform that ingests contracts asynchronously, detects added, removed, and modified clauses with risk levels, and answers questions against the retrieved clauses with source attribution.',
+    mockup: ContractMockup,
+    repo: 'https://github.com/NitZZ057/Contract-intelligence',
+    blocks: [
+      ['Problem', 'Manual version-by-version review missed changed payment terms and new liability clauses, and left no audit trail.'],
+      ['Solution', 'Built a change detection agent and a RAG Q&A pipeline over a Celery ingestion queue, PostgreSQL, and Pinecone, streamed to a React frontend over Server-Sent Events.'],
+      ['Architecture', 'Upload returns 202 immediately, workers parse and embed clauses, retrieval scopes context by contract, GPT-4o-mini reasons only over retrieved text, and Ragas scores the pipeline on every deployment.'],
+    ],
+    wins: [
+      '0.91 faithfulness, 0.87 answer relevancy, 0.84 context precision',
+      'Clause-level risk classification with plain-English explanations',
+      'Async ingestion keeps uploads instant and scales horizontally',
+    ],
   },
 ];
 
@@ -138,6 +196,11 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 };
 
+function caseStudySlug(hash) {
+  if (!hash || !hash.startsWith('#/case-study')) return null;
+  return hash.slice('#/case-study'.length).replace(/^\//, '') || defaultCaseStudy;
+}
+
 export default function App() {
   const baseUrl = import.meta.env.BASE_URL;
   const [route, setRoute] = useState(window.location.hash);
@@ -149,8 +212,10 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleRouteChange);
   }, []);
 
+  const activeCaseStudy = caseStudySlug(route);
+
   useEffect(() => {
-    if (route === '#/case-study') {
+    if (caseStudySlug(route)) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -162,8 +227,8 @@ export default function App() {
     });
   }, [route]);
 
-  if (route === '#/case-study') {
-    return <CaseStudyPage />;
+  if (activeCaseStudy) {
+    return <CaseStudyPage slug={activeCaseStudy} />;
   }
 
   return (
@@ -228,68 +293,68 @@ export default function App() {
           </div>
         </section>
 
-        <Section id="featured" eyebrow="Featured Work" title="Multi-Agent AI Policy Assistant">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-120px' }}
-            variants={fadeUp}
-            transition={{ duration: 0.7 }}
-            className="grid overflow-hidden rounded-2xl border border-line bg-panel/80 shadow-2xl shadow-black/30 lg:grid-cols-2"
-          >
-            <div className="border-b border-line bg-slate-950/40 p-5 sm:p-8 lg:border-b-0 lg:border-r">
-              <ProjectMockup />
-            </div>
-            <div className="p-6 sm:p-8 lg:p-10">
-              <Badge icon={Rocket}>FastAPI, LangChain, Pinecone, Ragas</Badge>
-              <h3 className="mt-6 text-3xl font-bold tracking-normal text-ink">
-                AI policy automation for insurance workflows
-              </h3>
-              <p className="mt-4 text-lg leading-8 text-muted">
-                Insurance policy teams needed accurate answers across dense documents, policy rules, and workflow states. I
-                built an agentic RAG system that retrieves grounded context, reasons through policy intent, and exposes the
-                result through production-ready FastAPI services.
-              </p>
-              <div className="mt-6 grid gap-4">
-                {[
-                  ['Problem', 'Manual policy lookup created slow decisions, inconsistent interpretation, and limited traceability.'],
-                  ['Solution', 'Designed planner, retrieval, reasoning, and response agents backed by Pinecone vector search and LangChain orchestration.'],
-                  ['Architecture', 'Document ingestion creates embeddings, retrieval injects policy context, agents coordinate task flow, and Ragas evaluates faithfulness before scaling usage.'],
-                ].map(([label, copy]) => (
-                  <div key={label} className="rounded-2xl border border-line bg-slate-950/35 p-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">{label}</p>
-                    <p className="mt-2 text-sm leading-6 text-slate-300">{copy}</p>
+        <Section id="featured" eyebrow="Featured Work" title="Two production AI systems, built end to end.">
+          <div className="grid gap-8">
+            {featured.map((item, index) => {
+              const Mockup = item.mockup;
+              const flipped = index % 2 === 1;
+
+              return (
+                <motion.div
+                  key={item.slug}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-120px' }}
+                  variants={fadeUp}
+                  transition={{ duration: 0.7 }}
+                  className="grid overflow-hidden rounded-2xl border border-line bg-panel/80 shadow-2xl shadow-black/30 lg:grid-cols-2"
+                >
+                  <div
+                    className={`border-b border-line bg-slate-950/40 p-5 sm:p-8 lg:border-b-0 ${
+                      flipped ? 'lg:order-2 lg:border-l' : 'lg:border-r'
+                    }`}
+                  >
+                    <Mockup />
                   </div>
-                ))}
-              </div>
-              <div className="mt-7 grid gap-3">
-                {[
-                  '90%+ faithfulness measured with Ragas',
-                  'Reduced manual policy review effort by roughly 50%',
-                  'Automated document-grounded answers for insurance workflows',
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-3 text-sm text-slate-200">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/15 text-primary">
-                      <BadgeCheck size={15} />
-                    </span>
-                    {item}
+                  <div className={`p-6 sm:p-8 lg:p-10 ${flipped ? 'lg:order-1' : ''}`}>
+                    <Badge icon={Rocket}>{item.stack}</Badge>
+                    <h3 className="mt-6 text-3xl font-bold tracking-normal text-ink">{item.heading}</h3>
+                    <p className="mt-4 text-lg leading-8 text-muted">{item.intro}</p>
+                    <div className="mt-6 grid gap-4">
+                      {item.blocks.map(([label, copy]) => (
+                        <div key={label} className="rounded-2xl border border-line bg-slate-950/35 p-4">
+                          <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">{label}</p>
+                          <p className="mt-2 text-sm leading-6 text-slate-300">{copy}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-7 grid gap-3">
+                      {item.wins.map((win) => (
+                        <div key={win} className="flex items-center gap-3 text-sm text-slate-200">
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+                            <BadgeCheck size={15} />
+                          </span>
+                          {win}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-8 flex flex-wrap gap-3">
+                      <Button href={`${baseUrl}#/case-study/${item.slug}`}>
+                        View Case Study <ExternalLink size={18} />
+                      </Button>
+                      <Button href={item.repo} variant="ghost">
+                        GitHub <Github size={18} />
+                      </Button>
+                    </div>
                   </div>
-                ))}
-              </div>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button href={`${baseUrl}#/case-study`}>
-                  View Case Study <ExternalLink size={18} />
-                </Button>
-                <Button href="https://github.com/NitZZ057" variant="ghost">
-                  GitHub <Github size={18} />
-                </Button>
-              </div>
-            </div>
-          </motion.div>
+                </motion.div>
+              );
+            })}
+          </div>
         </Section>
 
         <Section id="projects" eyebrow="Projects" title="AI and backend systems built around real business workflows.">
-          <div className="grid gap-5 lg:grid-cols-3">
+          <div className="grid gap-5 md:grid-cols-2">
             {projects.map((project, index) => (
               <ProjectCard key={project.title} project={project} delay={index * 0.1} />
             ))}

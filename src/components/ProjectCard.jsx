@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, BadgeCheck, Hammer, Target } from 'lucide-react';
 
 export default function ProjectCard({ project, delay = 0 }) {
+  const baseUrl = import.meta.env.BASE_URL;
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
@@ -56,6 +58,16 @@ export default function ProjectCard({ project, delay = 0 }) {
           </div>
         ))}
       </div>
+
+      {project.caseStudy ? (
+        <a
+          href={`${baseUrl}#/case-study/${project.caseStudy}`}
+          className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-primary transition hover:gap-3"
+        >
+          View case study
+          <ArrowUpRight size={16} />
+        </a>
+      ) : null}
     </motion.article>
   );
 }
